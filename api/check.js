@@ -353,8 +353,14 @@ function analyzeHeaders(headers, finalUrl) {
       fix: 'Add a Permissions-Policy header that disables features the site does not need, e.g. camera=(), microphone=(), geolocation=()' });
   }
 
-  if (get('server')) warnings.push('The Server header reveals the server software: "' + get('server') + '". Attackers use this to pick known exploits. Hide or genericise it if you can.');
-  if (get('x-powered-by')) warnings.push('The X-Powered-By header reveals the platform: "' + get('x-powered-by') + '". Remove it if you can.');
+  if (get('server')) warnings.push({
+    text: 'The Server header reveals the server software: "' + get('server') + '". Attackers use this to pick known exploits for that exact software.',
+    solution: 'Remove the Server header, or set it to a short generic value with no software name or version number. Most hosts and CDNs have a setting or one config line for this.'
+  });
+  if (get('x-powered-by')) warnings.push({
+    text: 'The X-Powered-By header reveals the platform: "' + get('x-powered-by') + '". Attackers use this to target known weaknesses of that platform.',
+    solution: 'Remove the X-Powered-By header — in most frameworks it is one setting (for example, Express: app.disable(\'x-powered-by\'); PHP: expose_php = Off).'
+  });
 
   return { results, warnings, score: Math.max(0, Math.min(100, score)) };
 }
@@ -404,7 +410,10 @@ module.exports = async (req, res) => {
   try { bodyText = await response.text(); } catch { /* body not essential */ }
 
   const headerAnalysis = analyzeHeaders(headers, finalUrl);
-  const headerPoints = Math.round(headerAnalysis.score * 0.6);
+  // The six header weights add up to 90 raw points; scale to a true /100 so
+  // a site with every header set perfectly scores 100, not 90.
+  const headerScore = Math.min(100, Math.round((headerAnalysis.score / 90) * 100));
+  const headerPoints = Math.round(headerScore * 0.6);
 
   const [sslCheck, httpsCheck] = await Promise.all([
     checkSsl(finalUrl),
@@ -424,8 +433,8 @@ module.exports = async (req, res) => {
     https,
     score: overall,
     grade: gradeFor(overall),
-    headerScore: headerAnalysis.score,
-    headerGrade: gradeFor(headerAnalysis.score),
+    headerScore,
+    headerGrade: gradeFor(headerScore),
     checks,
     results: headerAnalysis.results,
     warnings: headerAnalysis.warnings,
