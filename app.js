@@ -33,7 +33,7 @@
     }
     if (fix) {
       var p = el('p', 'fix');
-      p.appendChild(el('strong', null, 'Fix: '));
+      p.appendChild(el('strong', null, 'Solution: '));
       p.appendChild(document.createTextNode(fix));
       card.appendChild(p);
     }
@@ -72,7 +72,21 @@
     var list = document.getElementById('warningsList');
     list.innerHTML = '';
     if (data.warnings && data.warnings.length) {
-      data.warnings.forEach(function (w) { list.appendChild(el('li', null, w)); });
+      data.warnings.forEach(function (w) {
+        var li = el('li');
+        if (typeof w === 'string') {
+          li.textContent = w;
+        } else {
+          li.appendChild(document.createTextNode(w.text));
+          if (w.solution) {
+            var s = el('div', 'warn-solution');
+            s.appendChild(el('strong', null, 'Solution: '));
+            s.appendChild(document.createTextNode(w.solution));
+            li.appendChild(s);
+          }
+        }
+        list.appendChild(li);
+      });
       warnCard.hidden = false;
     } else {
       warnCard.hidden = true;

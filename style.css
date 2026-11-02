@@ -44,6 +44,7 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-appl
 .hcard .findings{margin:8px 0 0;padding-left:20px;color:var(--muted)}
 .warn-card h2,.about h2{margin-top:0;font-size:1.15rem}
 .warn-card ul{margin:0;padding-left:20px;color:var(--muted)}
+.warn-card .warn-solution{color:var(--text);margin-top:4px}
 .about p{color:var(--muted);margin-bottom:0}
 footer{text-align:center;color:var(--muted);margin-top:26px;font-size:.9rem}
 footer a{color:var(--accent)}
