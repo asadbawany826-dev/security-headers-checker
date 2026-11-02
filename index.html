@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Security Headers Checker — Asad Imran</title>
-<meta name="description" content="Check any website's HTTP security headers and get a grade with plain-English explanations and fixes.">
+<title>Website Security Checker — Asad Imran</title>
+<meta name="description" content="Paste any website address and get its overall security grade: SSL certificate, HTTPS enforcement, cookies, mixed content and security headers — with plain-English explanations and fixes.">
 <link rel="stylesheet" href="/style.css">
 </head>
 <body>
@@ -13,8 +13,8 @@
     <div class="logo" aria-hidden="true">
       <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/><path d="M9.5 12l2 2 3.5-4"/></svg>
     </div>
-    <h1>Security Headers Checker</h1>
-    <p class="sub">Enter any website address. This tool reads the site's HTTP security headers and grades them — what is set, what is missing, and how to fix it.</p>
+    <h1>Website Security Checker</h1>
+    <p class="sub">Enter any website address. This tool checks how secure the site really is — its SSL certificate, HTTPS enforcement, cookies, mixed content and security headers — and gives one overall grade, with the reasons and the fixes.</p>
   </header>
 
   <form id="checkForm" class="card form-card">
@@ -39,13 +39,20 @@
       <div class="grade-wrap">
         <div id="gradeBadge" class="grade">–</div>
         <div>
-          <div class="score-line"><strong id="scoreText">–</strong> / 100</div>
+          <div class="score-line"><strong id="scoreText">–</strong> / 100 overall</div>
           <div class="bar"><div id="scoreBar"></div></div>
           <div id="metaLine" class="meta"></div>
+          <div id="headerScoreLine" class="meta"></div>
         </div>
       </div>
     </div>
+
+    <h2 class="sec-title">Full security checks</h2>
+    <div id="checkCards"></div>
+
+    <h2 class="sec-title">Security headers</h2>
     <div id="headerCards"></div>
+
     <div id="warningsCard" class="card warn-card" hidden>
       <h2>Extra findings</h2>
       <ul id="warningsList"></ul>
@@ -53,8 +60,8 @@
   </section>
 
   <section class="card about">
-    <h2>What are security headers?</h2>
-    <p>Security headers are instructions a website sends with every page. They tell the browser things like "always use HTTPS", "never show this page inside another site's frame" and "do not run scripts from strangers". They cost nothing to add, and together they block whole families of attacks — clickjacking, script injection, connection downgrading and MIME sniffing. This checker looks at the six headers that matter most.</p>
+    <h2>What does this tool check?</h2>
+    <p><strong>SSL certificate</strong> — is it valid, trusted, and not about to expire? <strong>HTTPS enforcement</strong> — does the plain-HTTP address force visitors onto the secure version? <strong>Cookies</strong> — do they carry the Secure, HttpOnly and SameSite flags that protect them? <strong>Mixed content</strong> — does a secure page secretly load files over plain HTTP? And <strong>security headers</strong> — the instructions (CSP, HSTS and more) that tell the browser how to protect the page. Together they give one honest picture of how secure a website is.</p>
   </section>
 
   <footer>Built by Asad Imran — Frontend Developer &amp; AI Creator · <a href="https://asadimran.tech">asadimran.tech</a></footer>

@@ -18,6 +18,28 @@
     return 'g-bad';
   }
 
+  function makeCard(title, pillText, status, note, value, findings, fix) {
+    var card = el('div', 'hcard');
+    var top = el('div', 'top');
+    top.appendChild(el('h3', null, title));
+    top.appendChild(el('span', 'pill ' + status, pillText));
+    card.appendChild(top);
+    card.appendChild(el('p', null, note));
+    if (value) card.appendChild(el('div', 'val', value));
+    if (findings && findings.length) {
+      var ul = el('ul', 'findings');
+      findings.forEach(function (f) { ul.appendChild(el('li', null, f)); });
+      card.appendChild(ul);
+    }
+    if (fix) {
+      var p = el('p', 'fix');
+      p.appendChild(el('strong', null, 'Fix: '));
+      p.appendChild(document.createTextNode(fix));
+      card.appendChild(p);
+    }
+    return card;
+  }
+
   function render(data) {
     var badge = document.getElementById('gradeBadge');
     badge.textContent = data.grade;
@@ -28,26 +50,22 @@
     bar.style.background = data.score >= 80 ? 'var(--good)' : data.score >= 55 ? 'var(--weak)' : 'var(--bad)';
     document.getElementById('metaLine').textContent =
       data.finalUrl + '  ·  HTTP ' + data.statusCode + (data.https ? '  ·  HTTPS' : '  ·  plain HTTP (no encryption)');
+    if (typeof data.headerScore === 'number') {
+      document.getElementById('headerScoreLine').textContent =
+        'Security headers alone: grade ' + data.headerGrade + ' · ' + data.headerScore + '/100';
+    }
+
+    var checkHolder = document.getElementById('checkCards');
+    checkHolder.innerHTML = '';
+    (data.checks || []).forEach(function (c) {
+      checkHolder.appendChild(makeCard(c.name, c.pill, c.status, c.note, null, c.findings, c.fix));
+    });
 
     var holder = document.getElementById('headerCards');
     holder.innerHTML = '';
     data.results.forEach(function (r) {
-      var card = el('div', 'hcard');
-      var top = el('div', 'top');
-      top.appendChild(el('h3', null, r.name));
       var label = r.status === 'good' ? 'SET' : r.status === 'weak' ? 'WEAK' : 'MISSING';
-      top.appendChild(el('span', 'pill ' + r.status, label));
-      card.appendChild(top);
-      card.appendChild(el('p', null, r.note));
-      if (r.value) card.appendChild(el('div', 'val', r.value));
-      if (r.fix) {
-        var fix = el('p', 'fix');
-        var b = el('strong', null, 'Fix: ');
-        fix.appendChild(b);
-        fix.appendChild(document.createTextNode(r.fix));
-        card.appendChild(fix);
-      }
-      holder.appendChild(card);
+      holder.appendChild(makeCard(r.name, label, r.status, r.note, r.value, null, r.fix));
     });
 
     var warnCard = document.getElementById('warningsCard');

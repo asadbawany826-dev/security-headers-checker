@@ -40,6 +40,8 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-appl
 .hcard p{margin:8px 0 0;color:var(--muted)}
 .hcard .val{margin-top:10px;background:var(--card2);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.82rem;word-break:break-all}
 .hcard .fix{margin-top:8px;color:var(--text)}
+.sec-title{margin:26px 4px 2px;font-size:1.25rem}
+.hcard .findings{margin:8px 0 0;padding-left:20px;color:var(--muted)}
 .warn-card h2,.about h2{margin-top:0;font-size:1.15rem}
 .warn-card ul{margin:0;padding-left:20px;color:var(--muted)}
 .about p{color:var(--muted);margin-bottom:0}
