@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Security Headers Checker — Asad Imran</title>
+<meta name="description" content="Check any website's HTTP security headers and get a grade with plain-English explanations and fixes.">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<main class="wrap">
+  <header class="hero">
+    <div class="logo" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/><path d="M9.5 12l2 2 3.5-4"/></svg>
+    </div>
+    <h1>Security Headers Checker</h1>
+    <p class="sub">Enter any website address. This tool reads the site's HTTP security headers and grades them — what is set, what is missing, and how to fix it.</p>
+  </header>
+
+  <form id="checkForm" class="card form-card">
+    <label for="urlInput">Website address</label>
+    <div class="row">
+      <input id="urlInput" type="text" inputmode="url" autocomplete="off" spellcheck="false" placeholder="e.g. asadimran.tech" required>
+      <button id="checkBtn" type="submit">Check</button>
+    </div>
+    <div class="chips">
+      <span>Try:</span>
+      <button type="button" class="chip" data-url="asadimran.tech">asadimran.tech</button>
+      <button type="button" class="chip" data-url="github.com">github.com</button>
+      <button type="button" class="chip" data-url="google.com">google.com</button>
+      <button type="button" class="chip" data-url="example.com">example.com</button>
+    </div>
+  </form>
+
+  <div id="errorBox" class="card error" hidden></div>
+
+  <section id="results" hidden>
+    <div class="card summary">
+      <div class="grade-wrap">
+        <div id="gradeBadge" class="grade">–</div>
+        <div>
+          <div class="score-line"><strong id="scoreText">–</strong> / 100</div>
+          <div class="bar"><div id="scoreBar"></div></div>
+          <div id="metaLine" class="meta"></div>
+        </div>
+      </div>
+    </div>
+    <div id="headerCards"></div>
+    <div id="warningsCard" class="card warn-card" hidden>
+      <h2>Extra findings</h2>
+      <ul id="warningsList"></ul>
+    </div>
+  </section>
+
+  <section class="card about">
+    <h2>What are security headers?</h2>
+    <p>Security headers are instructions a website sends with every page. They tell the browser things like "always use HTTPS", "never show this page inside another site's frame" and "do not run scripts from strangers". They cost nothing to add, and together they block whole families of attacks — clickjacking, script injection, connection downgrading and MIME sniffing. This checker looks at the six headers that matter most.</p>
+  </section>
+
+  <footer>Built by Asad Imran — Frontend Developer &amp; AI Creator · <a href="https://asadimran.tech">asadimran.tech</a></footer>
+</main>
+<script src="/app.js"></script>
+</body>
+</html>
