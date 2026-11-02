@@ -47,7 +47,7 @@
     document.getElementById('scoreText').textContent = data.score;
     var bar = document.getElementById('scoreBar');
     bar.style.width = data.score + '%';
-    bar.style.background = data.score >= 80 ? 'var(--good)' : data.score >= 55 ? 'var(--weak)' : 'var(--bad)';
+    bar.style.background = data.score >= 80 ? '#ffffff' : data.score >= 55 ? '#8f8f8f' : '#3f3f3f';
     document.getElementById('metaLine').textContent =
       data.finalUrl + '  ·  HTTP ' + data.statusCode + (data.https ? '  ·  HTTPS' : '  ·  plain HTTP (no encryption)');
     if (typeof data.headerScore === 'number') {
@@ -67,6 +67,37 @@
       var label = r.status === 'good' ? 'SET' : r.status === 'weak' ? 'WEAK' : 'MISSING';
       holder.appendChild(makeCard(r.name, label, r.status, r.note, r.value, null, r.fix));
     });
+
+    // Roadmap to 100%: every lost point, and the fix that earns it back.
+    var roadCard = document.getElementById('roadmapCard');
+    var roadList = document.getElementById('roadmapList');
+    var roadIntro = document.getElementById('roadmapIntro');
+    roadList.innerHTML = '';
+    var items = [];
+    (data.checks || []).forEach(function (c) {
+      if (c.points < c.maxPoints) {
+        items.push({ lost: c.maxPoints - c.points, text: c.name + ': ' + (c.fix || c.note) });
+      }
+    });
+    if (typeof data.headerScore === 'number') {
+      var headerLost = 60 - Math.round(data.headerScore * 0.6);
+      if (headerLost > 0) {
+        items.push({ lost: headerLost, text: 'Security headers: fix the items marked WEAK or MISSING in the Security headers section below — each one shows its own Solution.' });
+      }
+    }
+    items.sort(function (a, b) { return b.lost - a.lost; });
+    if (data.score >= 100 || !items.length) {
+      roadIntro.textContent = 'This website passes every check — a perfect 100%. Nothing to fix.';
+    } else {
+      roadIntro.textContent = 'This website is ' + (100 - data.score) + ' points away from 100%. Fix these and it gets there:';
+      items.forEach(function (it) {
+        var li = el('li');
+        li.appendChild(el('strong', null, '−' + it.lost + ' pts '));
+        li.appendChild(document.createTextNode('— ' + it.text));
+        roadList.appendChild(li);
+      });
+    }
+    roadCard.hidden = false;
 
     var warnCard = document.getElementById('warningsCard');
     var list = document.getElementById('warningsList');
